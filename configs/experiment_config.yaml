@@ -1,0 +1,113 @@
+# Configuração de Experimento — Pipeline Dinâmico
+# Este arquivo demonstra como configurar um experimento via YAML.
+# O main.py usa configs Python embutidas, mas este YAML pode ser estendido para carregamento dinâmico.
+
+experiment:
+  name: "exp_hatebr_v1"
+  dataset: "hatebr"
+  data_path: "hatebr.csv"
+  results_dir: "results"
+  random_state: 42
+
+# Configurações de pré-processamento a serem testadas
+preprocessing:
+  - name: "basica"
+    lowercase: true
+    remove_urls: true
+    remove_mentions: true
+    remove_punctuation: true
+    remove_numbers: true
+    remove_stopwords: true
+    keep_negations: true
+    handle_negations: false
+    stemming: false
+    handle_emojis: "remove"
+    min_token_length: 2
+
+  - name: "stemming_negacao"
+    lowercase: true
+    remove_urls: true
+    remove_mentions: true
+    remove_punctuation: true
+    remove_numbers: true
+    remove_stopwords: true
+    keep_negations: true
+    handle_negations: true
+    stemming: true
+    handle_emojis: "demojize"
+    min_token_length: 2
+
+  - name: "minima"
+    lowercase: true
+    remove_urls: true
+    remove_mentions: true
+    remove_punctuation: false
+    remove_numbers: false
+    remove_stopwords: false
+    keep_negations: false
+    handle_negations: false
+    stemming: false
+    handle_emojis: "keep"
+    min_token_length: 1
+
+# Configurações de vetorização
+vectorization:
+  - name: "bow_unigram"
+    method: "bow"
+    max_features: 10000
+    ngram_range: [1, 1]
+
+  - name: "tfidf_bigram"
+    method: "tfidf"
+    max_features: 10000
+    ngram_range: [1, 2]
+
+  - name: "tfidf_svd50"
+    method: "tfidf"
+    max_features: 10000
+    ngram_range: [1, 2]
+    svd_components: 50
+
+  - name: "tfidf_svd100"
+    method: "tfidf"
+    max_features: 10000
+    ngram_range: [1, 2]
+    svd_components: 100
+
+  - name: "tfidf_svd300"
+    method: "tfidf"
+    max_features: 10000
+    ngram_range: [1, 2]
+    svd_components: 300
+
+# Configurações de classificadores
+classifiers:
+  - name: "nb_manual"
+    model_name: "naive_bayes"
+    mode: "manual"
+
+  - name: "lr_manual"
+    model_name: "logistic_regression"
+    mode: "manual"
+
+  - name: "lr_auto"
+    model_name: "logistic_regression"
+    mode: "auto"
+    n_iter: 20
+
+  - name: "svc_manual"
+    model_name: "linear_svc"
+    mode: "manual"
+
+  - name: "svc_auto"
+    model_name: "linear_svc"
+    mode: "auto"
+    n_iter: 20
+
+  - name: "rf_manual"
+    model_name: "random_forest"
+    mode: "manual"
+
+  - name: "lgbm_manual"
+    model_name: "lightgbm"
+    mode: "manual"
